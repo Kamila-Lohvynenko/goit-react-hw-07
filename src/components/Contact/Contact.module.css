@@ -1,0 +1,6 @@
+.button {
+  outline: transparent;
+}
+.button:active {
+  outline: transparent;
+}
