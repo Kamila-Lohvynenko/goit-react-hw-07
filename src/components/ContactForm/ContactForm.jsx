@@ -3,7 +3,8 @@ import * as Yup from 'yup';
 import { useId } from 'react';
 import css from './ContactForm.module.css';
 import { useDispatch } from 'react-redux';
-import { addContact } from '../../redux/contactsSlice';
+import { addContact } from '../../redux/contactsOps';
+import toast from 'react-hot-toast';
 
 const ContactForm = () => {
   const nameFieldId = useId();
@@ -24,12 +25,16 @@ const ContactForm = () => {
     <Formik
       initialValues={{ name: '', number: '' }}
       onSubmit={(values, actions) => {
+        const { name, number } = values;
         dispatch(
           addContact({
-            id: Date.now(),
-            ...values,
+            name,
+            number,
           })
-        );
+        )
+          .unwrap()
+          .then(() => toast.success('You have added a contact successfully!'))
+          .catch(() => toast.error('The contact has not been added'));
 
         actions.resetForm();
       }}
